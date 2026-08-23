@@ -12,10 +12,15 @@
     "start": "pnpm migrate && next start",
     "lint": "eslint",
     "migrate": "tsx scripts/migrate.ts",
-    "gen-key": "tsx scripts/gen-key.ts"
+    "gen-key": "tsx scripts/gen-key.ts",
+    "build:lexicon": "lex build --importExt=\"\""
   },
   "dependencies": {
+    "@atproto/common-web": "^0.5.9",
+    "@atproto/lex": "^0.3.6",
     "@atproto/oauth-client-node": "^0.5.3",
+    "@atproto/syntax": "^0.7.4",
+    "@atproto/tap": "^0.4.4",
     "better-sqlite3": "^13.0.3",
     "kysely": "^0.29.5",
     "next": "16.3.0",

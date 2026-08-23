@@ -22,6 +22,37 @@ const migrations: Record<string, Migration> = {
       await db.schema.dropTable("auth_state").execute();
     },
   },
+  "002": {
+    async up(db: Kysely<unknown>) {
+      await db.schema
+        .createTable("account")
+        .addColumn("did", "text", (col) => col.primaryKey())
+        .addColumn("handle", "text", (col) => col.notNull())
+        .addColumn("active", "integer", (col) => col.notNull().defaultTo(1))
+        .execute();
+
+      await db.schema
+        .createTable("status")
+        .addColumn("uri", "text", (col) => col.primaryKey())
+        .addColumn("authorDid", "text", (col) => col.notNull())
+        .addColumn("status", "text", (col) => col.notNull())
+        .addColumn("createdAt", "text", (col) => col.notNull())
+        .addColumn("indexedAt", "text", (col) => col.notNull())
+        .addColumn("current", "integer", (col) => col.notNull().defaultTo(0))
+        .execute();
+
+      await db.schema
+        .createIndex("status_current_idx")
+        .on("status")
+        .columns(["current", "indexedAt"])
+        .execute();
+    },
+    async down(db: Kysely<unknown>) {
+      await db.schema.dropIndex("status_current_idx").on("status").execute();
+      await db.schema.dropTable("status").execute();
+      await db.schema.dropTable("account").execute();
+    },
+  },
 };
 
 export function getMigrator() {

@@ -11,7 +11,8 @@ import type {
 } from "@atproto/oauth-client-node";
 import { getDb } from "../db";
 
-export const SCOPE = "atproto account:email repo:com.example.record";
+export const SCOPE =
+  "atproto account:email repo:com.example.record repo:xyz.statusphere.status";
 
 // Use globalThis to persist across Next.js hot reloads
 const globalAuth = globalThis as unknown as {
