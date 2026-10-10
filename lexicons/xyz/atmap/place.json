@@ -1,0 +1,67 @@
+{
+  "lexicon": 1,
+  "id": "xyz.atmap.place",
+  "description": "A place saved by the user, typically sourced from OpenStreetMap.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["name", "category", "location", "createdAt"],
+        "properties": {
+          "name": { "type": "string", "maxLength": 640, "maxGraphemes": 64 },
+          "category": {
+            "type": "string",
+            "maxLength": 64,
+            "knownValues": ["restaurant", "cafe", "bar", "cinema", "architecture", "other"]
+          },
+          "location": { "type": "ref", "ref": "#geo" },
+          "address": { "type": "ref", "ref": "#address" },
+          "osm": { "type": "ref", "ref": "#osmRef" },
+          "tags": {
+            "type": "array",
+            "maxLength": 20,
+            "items": { "type": "string", "maxLength": 640, "maxGraphemes": 64 }
+          },
+          "lists": {
+            "type": "array",
+            "description": "AT-URIs of xyz.atmap.list records this place belongs to.",
+            "maxLength": 50,
+            "items": { "type": "string", "format": "at-uri" }
+          },
+          "note": { "type": "string", "maxLength": 3000, "maxGraphemes": 1000 },
+          "createdAt": { "type": "string", "format": "datetime" }
+        }
+      }
+    },
+    "geo": {
+      "type": "object",
+      "description": "WGS84 coordinates, as decimal strings (the atproto data model has no floats).",
+      "required": ["latitude", "longitude"],
+      "properties": {
+        "latitude": { "type": "string", "maxLength": 32 },
+        "longitude": { "type": "string", "maxLength": 32 }
+      }
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "street": { "type": "string", "maxLength": 640 },
+        "postalCode": { "type": "string", "maxLength": 64 },
+        "locality": { "type": "string", "maxLength": 640 },
+        "region": { "type": "string", "maxLength": 640 },
+        "country": { "type": "string", "maxLength": 10, "description": "ISO 3166 country code." }
+      }
+    },
+    "osmRef": {
+      "type": "object",
+      "description": "Reference to the OpenStreetMap element this place was created from.",
+      "required": ["type", "id"],
+      "properties": {
+        "type": { "type": "string", "knownValues": ["node", "way", "relation"], "maxLength": 16 },
+        "id": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

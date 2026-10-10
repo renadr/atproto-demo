@@ -7,6 +7,12 @@ import {
   deleteStatus,
   deleteAccount,
 } from "@/lib/db/queries";
+import {
+  indexList,
+  indexPlace,
+  unindexList,
+  unindexPlace,
+} from "@/lib/places";
 import * as xyz from "@/lexicons/xyz";
 
 const TAP_ADMIN_PASSWORD = process.env.TAP_ADMIN_PASSWORD;
@@ -41,8 +47,34 @@ export async function POST(request: NextRequest) {
     }
   }
 
+  // Handle place / list record changes
+  if (
+    evt.type === "record" &&
+    (evt.collection === xyz.atmap.place.$nsid ||
+      evt.collection === xyz.atmap.list.$nsid)
+  ) {
+    const uri = AtUri.make(evt.did, evt.collection, evt.rkey).toString();
+    const isPlace = evt.collection === xyz.atmap.place.$nsid;
+
+    if (evt.action === "create" || evt.action === "update") {
+      const parsed = isPlace
+        ? xyz.atmap.place.$safeParse(evt.record)
+        : xyz.atmap.list.$safeParse(evt.record);
+      if (!parsed.success) {
+        return NextResponse.json({ success: false });
+      }
+      if (isPlace) {
+        await indexPlace(uri, evt.cid ?? null, parsed.value as xyz.atmap.place.Main);
+      } else {
+        await indexList(uri, evt.cid ?? null, parsed.value as xyz.atmap.list.Main);
+      }
+    } else if (evt.action === "delete") {
+      await (isPlace ? unindexPlace(uri) : unindexList(uri));
+    }
+  }
+
   // Handle status record changes
-  if (evt.type === "record") {
+  if (evt.type === "record" && evt.collection === xyz.statusphere.status.$nsid) {
     const uri = AtUri.make(evt.did, evt.collection, evt.rkey);
 
     if (evt.action === "create" || evt.action === "update") {

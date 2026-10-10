@@ -12,7 +12,7 @@ import type {
 import { getDb } from "../db";
 
 export const SCOPE =
-  "atproto account:email repo:com.example.record repo:xyz.statusphere.status";
+  "atproto account:email repo:com.example.record repo:xyz.statusphere.status repo:xyz.atmap.place repo:xyz.atmap.list";
 
 // Use globalThis to persist across Next.js hot reloads
 const globalAuth = globalThis as unknown as {

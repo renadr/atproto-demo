@@ -1,0 +1,20 @@
+{
+  "lexicon": 1,
+  "id": "xyz.atmap.list",
+  "description": "A named collection of places. Places reference lists by AT-URI.",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": ["name", "createdAt"],
+        "properties": {
+          "name": { "type": "string", "maxLength": 640, "maxGraphemes": 64 },
+          "description": { "type": "string", "maxLength": 3000, "maxGraphemes": 300 },
+          "createdAt": { "type": "string", "format": "datetime" }
+        }
+      }
+    }
+  }
+}

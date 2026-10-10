@@ -22,6 +22,8 @@ export interface DatabaseSchema {
   auth_session: AuthSessionTable;
   account: AccountTable;
   status: StatusTable;
+  place: PlaceTable;
+  place_list: PlaceListTable;
 }
 
 interface AuthStateTable {
@@ -47,4 +49,36 @@ export interface StatusTable {
   createdAt: string;
   indexedAt: string;
   current: 0 | 1;
+}
+
+// Mirrors xyz.atmap.place. Nested objects/arrays are stored as JSON text.
+export interface PlaceTable {
+  uri: string;
+  cid: string | null;
+  authorDid: string;
+  rkey: string;
+  name: string;
+  category: string;
+  latitude: string;
+  longitude: string;
+  address: string | null;
+  osmType: string | null;
+  osmId: number | null;
+  tags: string;
+  lists: string;
+  note: string | null;
+  createdAt: string;
+  indexedAt: string;
+}
+
+// Mirrors xyz.atmap.list.
+export interface PlaceListTable {
+  uri: string;
+  cid: string | null;
+  authorDid: string;
+  rkey: string;
+  name: string;
+  description: string | null;
+  createdAt: string;
+  indexedAt: string;
 }
