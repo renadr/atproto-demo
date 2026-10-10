@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
 import { LoginForm } from "@/components/LoginForm";
 import { LogoutButton } from "@/components/LogoutButton";
@@ -40,6 +41,12 @@ export default async function Home() {
               <LogoutButton />
             </div>
             <StatusPicker currentStatus={accountStatus?.status} />
+            <Link
+              href="/places"
+              className="block mt-4 text-sm text-blue-600 hover:underline"
+            >
+              🗺️ Mes adresses →
+            </Link>
           </div>
         ) : (
           <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-6 mb-6">
